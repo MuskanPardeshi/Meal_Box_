@@ -3,6 +3,7 @@ import RestaurantCard from "./RestaurantCard";
 import {useEffect, useState} from "react"
 import Shimmer from "./Shimmer"
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 const Body = () =>{
     const [ListOfRestaurant, setListOfRestaurant] = useState([])
@@ -21,6 +22,12 @@ const fetchData = async () => {
   setFilteredRestaurants(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
 }
  
+
+    const onlineStatus = useOnlineStatus()
+
+    if(onlineStatus===false){
+      return <h1>Looks like you are offline !!! Please check your internet connection</h1>
+    }
 
     return ListOfRestaurant.length === 0 ? (<Shimmer/>
     ):(
@@ -47,11 +54,7 @@ const fetchData = async () => {
       </button>
       <button className = "filter-btn" 
       onClick ={() => {
-        // const originalList = [...ListOfRestaurant];
-        // const filteredRestaurant = originalList.filter((res) => res.info.avgRating > 4);
-        // setFilteredRestaurants(filteredRestaurant);
         const Filter = ListOfRestaurant.filter((res) => res.info.avgRating > 4)
-        // setListOfRestaurant(Filter)
         setFilteredRestaurants(Filter)
       }} >Top Restaurant</button>
       </div>
